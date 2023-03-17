@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "PersiaGameState.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +83,10 @@ void APersiaCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APersiaCharacter::Look);
+
+		// Rewinding
+		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Started, this, &APersiaCharacter::Rewind);
+		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Completed, this, &APersiaCharacter::StopRewinding);
 	}
 }
 
@@ -119,3 +124,12 @@ void APersiaCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void APersiaCharacter::Rewind_Implementation(const FInputActionValue& Value)
+{
+	GetWorld()->GetGameState<APersiaGameState>()->RequestStartRewind(this);
+}
+
+void APersiaCharacter::StopRewinding_Implementation(const FInputActionValue& Value)
+{
+	GetWorld()->GetGameState<APersiaGameState>()->RequestStopRewind(this);
+}

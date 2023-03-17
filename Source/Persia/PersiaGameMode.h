@@ -14,5 +14,8 @@ class APersiaGameMode : public AGameModeBase
 
 public:
 	APersiaGameMode();
+
+protected:
+	void PostLogin(APlayerController* PlayerController) override;
 };
 

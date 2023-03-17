@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "RewindableCharacter.h"
 
 #include "PersiaCharacter.generated.h"
 
 
 UCLASS(config = Game)
-class APersiaCharacter : public ACharacter
+class APersiaCharacter : public ARewindableCharacter
 {
 	GENERATED_BODY()
 
@@ -38,6 +38,10 @@ class APersiaCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	/** Rewind Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* RewindAction;
+
 public:
 	APersiaCharacter();
 
@@ -48,6 +52,14 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	UFUNCTION(Server, Reliable)
+	void Rewind(const FInputActionValue& Value);
+	void Rewind_Implementation(const FInputActionValue& Value);
+
+	UFUNCTION(Server, Reliable)
+	void StopRewinding(const FInputActionValue& Value);
+	void StopRewinding_Implementation(const FInputActionValue& Value);
 
 
 protected:
