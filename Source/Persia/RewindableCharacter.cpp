@@ -1,6 +1,7 @@
 #include "RewindableCharacter.h"
 
 #include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "RewindSnapshot.h"
 #include "RewindableAnimInstance.h"
@@ -8,6 +9,11 @@
 void ARewindableCharacter::StartRewind()
 {
 	bRewinding = true;
+
+	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+		CharacterMovement->StopMovementImmediately();
+		CharacterMovement->DisableMovement();
+	}
 }
 
 void ARewindableCharacter::StopRewind()
@@ -16,6 +22,10 @@ void ARewindableCharacter::StopRewind()
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->ClearRewoundPose();
 	}
+
+	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+		CharacterMovement->SetDefaultMovementMode();
+	}
 }
 
 void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
@@ -23,6 +33,11 @@ void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snaps
 	Snapshot.Transform = GetActorTransform();
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->SnapshotPose(Snapshot.Pose);
+	}
+
+	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+		CharacterMovement->StopMovementImmediately();
+		CharacterMovement->DisableMovement();
 	}
 }
 
