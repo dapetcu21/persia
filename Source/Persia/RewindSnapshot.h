@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Animation/PoseSnapshot.h"
 #include "CoreMinimal.h"
 
 #include "RewindSnapshot.generated.h"
@@ -17,6 +18,9 @@ struct FRewindActorSnapshot
 
 	UPROPERTY()
 	FRotator CameraRotation;
+
+	UPROPERTY()
+	FPoseSnapshot Pose;
 };
 
 USTRUCT()
