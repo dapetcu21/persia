@@ -104,8 +104,16 @@ void URewindManager::Tick(double DeltaTime)
 		RewindCursorSnapIndex -= 1;
 	}
 
-	// Improvement idea for the future: LERP Snapshots[RewindCursorSnapIndex] and Snapshots[RewindCursorSnapIndex + 1]
-	RestoreSnapshot(Snapshots[RewindCursorSnapIndex]);
+	if (RewindCursorSnapIndex == Snapshots.Num() - 1) {
+		RestoreSnapshot(Snapshots[RewindCursorSnapIndex]);
+	} else {
+		FRewindSnapshot& SnapshotA = Snapshots[RewindCursorSnapIndex];
+		FRewindSnapshot& SnapshotB = Snapshots[RewindCursorSnapIndex + 1];
+		double SnapshotDelta = SnapshotB.Timestamp - SnapshotA.Timestamp;
+		double Alpha = SnapshotDelta == 0.0 ? 0.0 : ((RewindCursor - SnapshotA.Timestamp) / SnapshotDelta);
+		// Improvement idea for the future: LERP(SnapshotA, SnapshotB, Alpha)
+		RestoreSnapshot(Alpha > 0.5 ? SnapshotB : SnapshotA);
+	}
 }
 
 double URewindManager::GetGameTime()
