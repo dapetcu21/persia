@@ -20,6 +20,9 @@ struct FRewindActorSnapshot
 	FRotator CameraRotation;
 
 	UPROPERTY()
+	FVector PatrolDirection;
+
+	UPROPERTY()
 	FPoseSnapshot Pose;
 };
 
