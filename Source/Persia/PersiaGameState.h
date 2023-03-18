@@ -5,7 +5,7 @@
 
 #include "PersiaGameState.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPersiaGameStateRewindingPlayerChange, APersiaCharacter*, RewindingPlayer);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPersiaGameStateRewindingPlayerChange, APersiaPlayerCharacter*, RewindingPlayer);
 
 UCLASS(minimalapi)
 class APersiaGameState : public AGameStateBase
@@ -16,7 +16,7 @@ class APersiaGameState : public AGameStateBase
 	class URewindManager* RewindManager = nullptr;
 
 	UPROPERTY()
-	class APersiaCharacter* RewindingPlayer = nullptr;
+	class APersiaPlayerCharacter* RewindingPlayer = nullptr;
 
 public:
 	UPROPERTY(BlueprintAssignable)
@@ -29,16 +29,16 @@ public:
 	void BeginPlay() override;
 	void Tick(float DeltaSeconds) override;
 
-	void RequestStartRewind(class APersiaCharacter* Sender);
-	void RequestStopRewind(class APersiaCharacter* Sender);
+	void RequestStartRewind(class APersiaPlayerCharacter* Sender);
+	void RequestStopRewind(class APersiaPlayerCharacter* Sender);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void ReInitRewindManager();
 	void ReInitRewindManager_Implementation();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void StartRewind(class APersiaCharacter* Sender);
-	void StartRewind_Implementation(class APersiaCharacter* Sender);
+	void StartRewind(class APersiaPlayerCharacter* Sender);
+	void StartRewind_Implementation(class APersiaPlayerCharacter* Sender);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void StopRewind(const struct FRewindSnapshot& Snapshot);

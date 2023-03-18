@@ -6,11 +6,11 @@
 #include "InputActionValue.h"
 #include "RewindableCharacter.h"
 
-#include "PersiaCharacter.generated.h"
+#include "PersiaPlayerCharacter.generated.h"
 
 
 UCLASS(config = Game)
-class APersiaCharacter : public ARewindableCharacter
+class APersiaPlayerCharacter : public ARewindableCharacter
 {
 	GENERATED_BODY()
 
@@ -43,7 +43,7 @@ class APersiaCharacter : public ARewindableCharacter
 	class UInputAction* RewindAction;
 
 public:
-	APersiaCharacter();
+	APersiaPlayerCharacter();
 
 
 protected:

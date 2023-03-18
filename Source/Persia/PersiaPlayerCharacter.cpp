@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "PersiaCharacter.h"
+#include "PersiaPlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -15,9 +15,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-// APersiaCharacter
+// APersiaPlayerCharacter
 
-APersiaCharacter::APersiaCharacter()
+APersiaPlayerCharacter::APersiaPlayerCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -54,7 +54,7 @@ APersiaCharacter::APersiaCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-void APersiaCharacter::BeginPlay()
+void APersiaPlayerCharacter::BeginPlay()
 {
 	// Call the base class
 	Super::BeginPlay();
@@ -70,7 +70,7 @@ void APersiaCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void APersiaCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void APersiaPlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
@@ -80,18 +80,18 @@ void APersiaCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APersiaCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APersiaPlayerCharacter::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APersiaCharacter::Look);
+		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APersiaPlayerCharacter::Look);
 
 		// Rewinding
-		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Started, this, &APersiaCharacter::Rewind);
-		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Completed, this, &APersiaCharacter::StopRewinding);
+		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Started, this, &APersiaPlayerCharacter::Rewind);
+		EnhancedInputComponent->BindAction(RewindAction, ETriggerEvent::Completed, this, &APersiaPlayerCharacter::StopRewinding);
 	}
 }
 
-void APersiaCharacter::Move(const FInputActionValue& Value)
+void APersiaPlayerCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
@@ -113,7 +113,7 @@ void APersiaCharacter::Move(const FInputActionValue& Value)
 	}
 }
 
-void APersiaCharacter::Look(const FInputActionValue& Value)
+void APersiaPlayerCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -125,27 +125,27 @@ void APersiaCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
-void APersiaCharacter::Rewind_Implementation(const FInputActionValue& Value)
+void APersiaPlayerCharacter::Rewind_Implementation(const FInputActionValue& Value)
 {
 	GetWorld()->GetGameState<APersiaGameState>()->RequestStartRewind(this);
 }
 
-void APersiaCharacter::StopRewinding_Implementation(const FInputActionValue& Value)
+void APersiaPlayerCharacter::StopRewinding_Implementation(const FInputActionValue& Value)
 {
 	GetWorld()->GetGameState<APersiaGameState>()->RequestStopRewind(this);
 }
 
-void APersiaCharacter::StartRewind()
+void APersiaPlayerCharacter::StartRewind()
 {
 	Super::StartRewind();
 }
 
-void APersiaCharacter::StopRewind()
+void APersiaPlayerCharacter::StopRewind()
 {
 	Super::StopRewind();
 }
 
-void APersiaCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
+void APersiaPlayerCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
 {
 	Super::SaveRewindSnapshot(Snapshot);
 	if (Controller != nullptr) {
@@ -153,7 +153,7 @@ void APersiaCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
 	}
 }
 
-void APersiaCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot)
+void APersiaPlayerCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot)
 {
 	Super::RestoreRewindSnapshot(Snapshot);
 	if (Controller != nullptr) {

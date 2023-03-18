@@ -31,20 +31,20 @@ void APersiaGameState::Tick(float DeltaSeconds)
 	RewindManager->Tick(DeltaSeconds);
 }
 
-void APersiaGameState::RequestStartRewind(class APersiaCharacter* Sender)
+void APersiaGameState::RequestStartRewind(class APersiaPlayerCharacter* Sender)
 {
 	if (RewindingPlayer != nullptr) return;
 	StartRewind(Sender);
 }
 
-void APersiaGameState::RequestStopRewind(class APersiaCharacter* Sender)
+void APersiaGameState::RequestStopRewind(class APersiaPlayerCharacter* Sender)
 {
 	if (RewindingPlayer != Sender) return;
 	FRewindSnapshot& Snapshot = RewindManager->StopRewindAuthorative();
 	StopRewind(Snapshot);
 }
 
-void APersiaGameState::StartRewind_Implementation(class APersiaCharacter* Sender)
+void APersiaGameState::StartRewind_Implementation(class APersiaPlayerCharacter* Sender)
 {
 	RewindingPlayer = Sender;
 	RewindManager->StartRewind();

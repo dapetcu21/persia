@@ -2,15 +2,15 @@
 
 #include "PersiaGameMode.h"
 
-#include "PersiaCharacter.h"
 #include "PersiaGameState.h"
+#include "PersiaPlayerCharacter.h"
 #include "PersiaPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 APersiaGameMode::APersiaGameMode()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
+	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_PersiaPlayerCharacter"));
 	if (PlayerPawnBPClass.Class != NULL) {
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
