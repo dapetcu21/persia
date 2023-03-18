@@ -3,6 +3,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "RewindSnapshot.h"
+#include "RewindableAnimInstance.h"
 
 void ARewindableCharacter::StartRewind()
 {
@@ -12,13 +13,15 @@ void ARewindableCharacter::StartRewind()
 void ARewindableCharacter::StopRewind()
 {
 	bRewinding = false;
-	bRewindingPose = false;
+	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
+		AnimInstance->ClearRewoundPose();
+	}
 }
 
 void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
 {
 	Snapshot.Transform = GetActorTransform();
-	if (UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance()) {
+	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->SnapshotPose(Snapshot.Pose);
 	}
 }
@@ -27,12 +30,9 @@ void ARewindableCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapsh
 {
 	SetActorTransform(Snapshot.Transform);
 
-	int32 Index = (RewoundPoseSelector + 1) % RewoundPoseCount;
-	RewoundPoseMutexes[Index].Lock();
-	RewoundPoses[Index] = Snapshot.Pose;
-	RewoundPoseMutexes[Index].Unlock();
-	RewoundPoseSelector = Index;
-	bRewindingPose = true;
+	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
+		AnimInstance->SetRewoundPose(Snapshot.Pose);
+	}
 }
 
 void ARewindableCharacter::BeginPlay()
