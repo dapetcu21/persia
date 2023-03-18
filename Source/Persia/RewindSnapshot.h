@@ -10,10 +10,13 @@ struct FRewindActorSnapshot
 	GENERATED_BODY()
 
 	UPROPERTY()
-	int32 NetId;
+	int32 NetId = 0;
 
 	UPROPERTY()
 	FTransform Transform;
+
+	UPROPERTY()
+	FRotator CameraRotation;
 };
 
 USTRUCT()

@@ -13,10 +13,8 @@ void URewindManager::Setup()
 	for (FActorIterator It(GameState->GetWorld()); It; ++It) {
 		if (ARewindableCharacter* Actor = Cast<ARewindableCharacter>(*It)) {
 			TrackedActors.Add(Actor->NetId, Actor);
-			UE_LOG(LogTemp, Display, TEXT("Tracked actor: %d"), Actor->NetId);
 		}
 	}
-	UE_LOG(LogTemp, Display, TEXT("Tracked actor count: %d"), TrackedActors.Num());
 
 	TimestampOffset = -GameState->GetServerWorldTimeSeconds();
 	TakeSnapshot(0.0);
@@ -32,9 +30,13 @@ void URewindManager::StartRewind()
 	RewindCursorSnapIndex = Snapshots.Num() - 1;
 	RewindVelocity = 1.0f;
 	RewindElapsedTime = 0.0f;
+
+	for (const TPair<int32, ARewindableCharacter*>& Pair : TrackedActors) {
+		Pair.Value->StartRewind();
+	}
 }
 
-FRewindSnapshot& URewindManager::EndRewindAuthorative()
+FRewindSnapshot& URewindManager::StopRewindAuthorative()
 {
 	check(bRewinding);
 
@@ -47,13 +49,13 @@ FRewindSnapshot& URewindManager::EndRewindAuthorative()
 	}
 	Snapshots.SetNum(Index + 1);
 
-	EndRewind(RewindCursor);
+	StopRewind(RewindCursor);
 
 	check(!Snapshots.IsEmpty());
 	return Snapshots.Top();
 }
 
-void URewindManager::EndRewindProxy(const FRewindSnapshot& AuthorativeSnapshot)
+void URewindManager::StopRewindProxy(const FRewindSnapshot& AuthorativeSnapshot)
 {
 	check(bRewinding);
 
@@ -69,14 +71,19 @@ void URewindManager::EndRewindProxy(const FRewindSnapshot& AuthorativeSnapshot)
 	Snapshots.Add(AuthorativeSnapshot);
 	RestoreSnapshot(AuthorativeSnapshot);
 
-	EndRewind(AuthorativeSnapshot.Timestamp);
+	StopRewind(AuthorativeSnapshot.Timestamp);
 }
 
-void URewindManager::EndRewind(double Cursor)
+void URewindManager::StopRewind(double Cursor)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop rewind"));
+
 	bRewinding = false;
 	TimestampOffset = Cursor - GameState->GetServerWorldTimeSeconds();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop rewind"));
+
+	for (const TPair<int32, ARewindableCharacter*>& Pair : TrackedActors) {
+		Pair.Value->StopRewind();
+	}
 }
 
 void URewindManager::Tick(double DeltaTime)

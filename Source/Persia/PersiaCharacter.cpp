@@ -11,6 +11,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "PersiaGameState.h"
+#include "RewindSnapshot.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -132,4 +133,30 @@ void APersiaCharacter::Rewind_Implementation(const FInputActionValue& Value)
 void APersiaCharacter::StopRewinding_Implementation(const FInputActionValue& Value)
 {
 	GetWorld()->GetGameState<APersiaGameState>()->RequestStopRewind(this);
+}
+
+void APersiaCharacter::StartRewind()
+{
+	Super::StartRewind();
+}
+
+void APersiaCharacter::StopRewind()
+{
+	Super::StopRewind();
+}
+
+void APersiaCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
+{
+	Super::SaveRewindSnapshot(Snapshot);
+	if (Controller != nullptr) {
+		Snapshot.CameraRotation = Controller->GetControlRotation();
+	}
+}
+
+void APersiaCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot)
+{
+	Super::RestoreRewindSnapshot(Snapshot);
+	if (Controller != nullptr) {
+		Controller->SetControlRotation(Snapshot.CameraRotation);
+	}
 }

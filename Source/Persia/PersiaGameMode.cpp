@@ -4,6 +4,7 @@
 
 #include "PersiaCharacter.h"
 #include "PersiaGameState.h"
+#include "PersiaPlayerController.h"
 #include "UObject/ConstructorHelpers.h"
 
 APersiaGameMode::APersiaGameMode()
@@ -15,6 +16,7 @@ APersiaGameMode::APersiaGameMode()
 	}
 
 	GameStateClass = APersiaGameState::StaticClass();
+	PlayerControllerClass = APersiaPlayerController::StaticClass();
 }
 
 void APersiaGameMode::PostLogin(APlayerController* PlayerController)

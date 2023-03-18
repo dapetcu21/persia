@@ -42,13 +42,13 @@ public:
 protected:
 	void TakeSnapshot(double Timestamp);
 	void RestoreSnapshot(const FRewindSnapshot& Snapshot);
-	void EndRewind(double Cursor);
+	void StopRewind(double Cursor);
 
 public:
 	void Setup();
 	void StartRewind();
-	FRewindSnapshot& EndRewindAuthorative();
-	void EndRewindProxy(const FRewindSnapshot& AuthorativeSnapshot);
+	FRewindSnapshot& StopRewindAuthorative();
+	void StopRewindProxy(const FRewindSnapshot& AuthorativeSnapshot);
 	void Tick(double DeltaTime);
 	double GetGameTime();
 };

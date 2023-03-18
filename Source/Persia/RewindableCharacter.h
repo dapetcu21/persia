@@ -18,6 +18,8 @@ public:
 	void BeginPlay() override;
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot);
-	void RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot);
+	void virtual StartRewind();
+	void virtual StopRewind();
+	void virtual SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot);
+	void virtual RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot);
 };

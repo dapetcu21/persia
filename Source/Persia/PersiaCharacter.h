@@ -74,5 +74,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	void StartRewind() override;
+	void StopRewind() override;
+	void SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot) override;
+	void RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot) override;
 };
 

@@ -3,6 +3,14 @@
 #include "Net/UnrealNetwork.h"
 #include "RewindSnapshot.h"
 
+void ARewindableCharacter::StartRewind()
+{
+}
+
+void ARewindableCharacter::StopRewind()
+{
+}
+
 void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
 {
 	Snapshot.Transform = GetActorTransform();

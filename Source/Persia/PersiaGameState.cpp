@@ -38,7 +38,7 @@ void APersiaGameState::RequestStartRewind(class APersiaCharacter* Sender)
 void APersiaGameState::RequestStopRewind(class APersiaCharacter* Sender)
 {
 	if (RewindingPlayer != Sender) return;
-	FRewindSnapshot& Snapshot = RewindManager->EndRewindAuthorative();
+	FRewindSnapshot& Snapshot = RewindManager->StopRewindAuthorative();
 	StopRewind(Snapshot);
 }
 
@@ -51,7 +51,7 @@ void APersiaGameState::StartRewind_Implementation(class APersiaCharacter* Sender
 void APersiaGameState::StopRewind_Implementation(const struct FRewindSnapshot& Snapshot)
 {
 	if (!HasAuthority()) {
-		RewindManager->EndRewindProxy(Snapshot);
+		RewindManager->StopRewindProxy(Snapshot);
 	}
 	RewindingPlayer = nullptr;
 }
