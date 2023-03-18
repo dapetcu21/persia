@@ -5,6 +5,8 @@
 
 #include "PersiaGameState.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPersiaGameStateRewindingPlayerChange, APersiaCharacter*, RewindingPlayer);
+
 UCLASS(minimalapi)
 class APersiaGameState : public AGameStateBase
 {
@@ -15,6 +17,10 @@ class APersiaGameState : public AGameStateBase
 
 	UPROPERTY()
 	class APersiaCharacter* RewindingPlayer = nullptr;
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FPersiaGameStateRewindingPlayerChange OnRewindingPlayerChange;
 
 public:
 	APersiaGameState();

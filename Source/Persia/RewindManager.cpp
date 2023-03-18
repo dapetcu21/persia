@@ -23,7 +23,6 @@ void URewindManager::Setup()
 void URewindManager::StartRewind()
 {
 	if (bRewinding) return;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Start rewind"));
 
 	bRewinding = true;
 	RewindCursor = TimestampOffset + GameState->GetServerWorldTimeSeconds();
@@ -76,8 +75,6 @@ void URewindManager::StopRewindProxy(const FRewindSnapshot& AuthorativeSnapshot)
 
 void URewindManager::StopRewind(double Cursor)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Stop rewind"));
-
 	bRewinding = false;
 	TimestampOffset = Cursor - GameState->GetServerWorldTimeSeconds();
 

@@ -19,6 +19,8 @@ void APersiaGameState::BeginPlay()
 	RewindManager->Setup();
 }
 
+// When a new player logs in we re-set the rewind manager,
+// so that it picks up the new player's pawn
 void APersiaGameState::ReInitRewindManager_Implementation()
 {
 	RewindManager->Setup();
@@ -46,6 +48,7 @@ void APersiaGameState::StartRewind_Implementation(class APersiaCharacter* Sender
 {
 	RewindingPlayer = Sender;
 	RewindManager->StartRewind();
+	OnRewindingPlayerChange.Broadcast(RewindingPlayer);
 }
 
 void APersiaGameState::StopRewind_Implementation(const struct FRewindSnapshot& Snapshot)
@@ -54,4 +57,5 @@ void APersiaGameState::StopRewind_Implementation(const struct FRewindSnapshot& S
 		RewindManager->StopRewindProxy(Snapshot);
 	}
 	RewindingPlayer = nullptr;
+	OnRewindingPlayerChange.Broadcast(RewindingPlayer);
 }
