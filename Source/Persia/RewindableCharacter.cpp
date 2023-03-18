@@ -34,11 +34,6 @@ void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snaps
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->SnapshotPose(Snapshot.Pose);
 	}
-
-	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
-		CharacterMovement->StopMovementImmediately();
-		CharacterMovement->DisableMovement();
-	}
 }
 
 void ARewindableCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot)
