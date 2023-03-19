@@ -1,6 +1,7 @@
 #include "PersiaGameState.h"
 
 #include "Engine/World.h"
+#include "GameFramework/WorldSettings.h"
 #include "PersiaGameMode.h"
 #include "RewindManager.h"
 
@@ -83,15 +84,12 @@ void APersiaGameState::SetPhase_Implementation(EPersiaGamePhase InPhase)
 	if (InPhase == Phase) return;
 	Phase = InPhase;
 
-	if (APersiaGameMode* GameMode = Cast<APersiaGameMode>(GetWorld()->GetAuthGameMode())) {
-		bool bShouldBePaused = Phase != EPersiaGamePhase::Running;
-		if (GameMode->IsPaused() != bShouldBePaused) {
-			if (bShouldBePaused) {
-				GameMode->SetPause(GetWorld()->GetFirstPlayerController());
-			} else {
-				GameMode->ClearPause();
-			}
-		}
+	// Because of an engine bug we can't actually pause the world (not without
+	// a lot of brittle complexity), so we set time dilation instead.
+	// https://forums.unrealengine.com/t/multiplayer-pause/81893/4
+	bool bShouldBePaused = Phase != EPersiaGamePhase::Running;
+	if (AWorldSettings* WorldSettings = GetWorld()->GetWorldSettings()) {
+		WorldSettings->SetTimeDilation(bShouldBePaused ? WorldSettings->MinGlobalTimeDilation : 1.0f);
 	}
 
 	OnPhaseChange.Broadcast(Phase);
