@@ -48,3 +48,10 @@ Similarily, the enemy AI's behavior tree must fulfill the same stateless-ness re
 * AI is implemented as a behavior tree that does an EQS query in front of the enemy actor.
 * Enemies get revived as well (this wasn't specified in the brief, but I thought this would make most sense. I think it's easy to change).
 * Game pause is not real world pause because of [an engine bug](https://forums.unrealengine.com/t/multiplayer-pause/81893/4).
+
+## Stuff that didn't make it:
+
+* Sound effects
+* Snapshot the ragdoll so it rewinds nicely
+* Niagara effects for kills/deaths
+* VHS rewind post-process shader
