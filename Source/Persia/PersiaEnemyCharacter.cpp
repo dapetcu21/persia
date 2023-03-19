@@ -12,7 +12,11 @@ void APersiaEnemyCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snap
 
 	if (AAIController* AIController = Cast<AAIController>(Controller)) {
 		if (UBlackboardComponent* BlackboardComponent = AIController->GetBlackboardComponent()) {
-			Snapshot.PatrolDirection = BlackboardComponent->GetValueAsVector(NAME_PatrolDirection);
+			if (BlackboardComponent->IsVectorValueSet(NAME_PatrolDirection)) {
+				Snapshot.PatrolDirection = BlackboardComponent->GetValueAsVector(NAME_PatrolDirection);
+			} else {
+				Snapshot.PatrolDirection = GetActorForwardVector();
+			}
 		}
 	}
 }
