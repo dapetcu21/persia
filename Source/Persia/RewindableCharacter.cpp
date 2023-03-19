@@ -7,6 +7,10 @@
 #include "RewindSnapshot.h"
 #include "RewindableAnimInstance.h"
 
+ARewindableCharacter::ARewindableCharacter()
+{
+}
+
 void ARewindableCharacter::StartRewind()
 {
 	bRewinding = true;
@@ -90,7 +94,6 @@ void ARewindableCharacter::Die()
 void ARewindableCharacter::OnRep_TimeOfDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("RepNotify time of death %s: %lf"), *GetFName().ToString(), TimeOfDeath);
-	if (bRewinding) return;
 	UpdateTimeOfDeath();
 }
 

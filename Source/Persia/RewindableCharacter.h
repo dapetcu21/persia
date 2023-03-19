@@ -12,6 +12,8 @@ class ARewindableCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+	ARewindableCharacter();
+
 	UPROPERTY(Replicated)
 	int32 NetId = 0;
 
