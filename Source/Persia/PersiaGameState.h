@@ -69,5 +69,8 @@ public:
 	double GetRewindGameTime();
 
 	UFUNCTION(BlueprintPure)
+	double GetRewindVelocity();
+
+	UFUNCTION(BlueprintPure)
 	bool IsRewinding();
 };

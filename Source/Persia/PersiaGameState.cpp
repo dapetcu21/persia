@@ -74,6 +74,11 @@ double APersiaGameState::GetRewindGameTime()
 	return RewindManager == nullptr ? 0.0 : RewindManager->GetGameTime();
 }
 
+double APersiaGameState::GetRewindVelocity()
+{
+	return RewindManager == nullptr ? 1.0 : RewindManager->RewindVelocity;
+}
+
 bool APersiaGameState::IsRewinding()
 {
 	return RewindManager != nullptr && RewindManager->bRewinding;
