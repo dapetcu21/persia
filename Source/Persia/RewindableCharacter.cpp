@@ -89,14 +89,27 @@ void ARewindableCharacter::Die()
 
 void ARewindableCharacter::OnRep_TimeOfDeath()
 {
+	UE_LOG(LogTemp, Warning, TEXT("RepNotify time of death %s: %lf"), *GetFName().ToString(), TimeOfDeath);
 	if (bRewinding) return;
 	UpdateTimeOfDeath();
 }
 
-void ARewindableCharacter::UpdateTimeOfDeath_Implementation()
+void ARewindableCharacter::UpdateTimeOfDeath()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Time of death of %s: %lf"), *GetFName().ToString(), TimeOfDeath);
+	double OldTimeOfDeath = LastTimeOfDeath;
+	LastTimeOfDeath = TimeOfDeath;
+	bool bDied = IsDead();
+	if (bDied != OldTimeOfDeath >= 0) {
+		UpdateDeathState(bDied);
+		OnDeathStateChange.Broadcast(bDied);
+	}
+}
+
+void ARewindableCharacter::UpdateDeathState_Implementation(bool bDied)
 {
 	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
-		if (IsDead()) {
+		if (bDied) {
 			CharacterMovement->DisableMovement();
 		} else {
 			CharacterMovement->SetDefaultMovementMode();

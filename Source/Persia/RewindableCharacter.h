@@ -4,6 +4,8 @@
 
 #include "RewindableCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDeathStateDelegate, bool, bDied);
+
 UCLASS(Blueprintable)
 class ARewindableCharacter : public ACharacter
 {
@@ -18,6 +20,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_TimeOfDeath)
 	double TimeOfDeath = -1.0;
+
+	UPROPERTY(BlueprintReadOnly)
+	double LastTimeOfDeath = -1.0;
+
+	UPROPERTY(BlueprintAssignable)
+	FDeathStateDelegate OnDeathStateChange;
 
 public:
 	void BeginPlay() override;
@@ -37,8 +45,9 @@ public:
 protected:
 	UFUNCTION()
 	void OnRep_TimeOfDeath();
+	void UpdateTimeOfDeath();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void UpdateTimeOfDeath();
-	virtual void UpdateTimeOfDeath_Implementation();
+	void UpdateDeathState(bool bDied);
+	virtual void UpdateDeathState_Implementation(bool bDied);
 };

@@ -118,7 +118,7 @@ double URewindManager::GetGameTime()
 	if (bRewinding) {
 		return RewindCursor;
 	}
-	return GameState->GetServerWorldTimeSeconds() - TimestampOffset;
+	return TimestampOffset + GameState->GetServerWorldTimeSeconds();
 }
 
 void URewindManager::TakeSnapshot(double Timestamp)
