@@ -4,7 +4,7 @@
 
 Every client is recording a timeline of world snapshots, saving one snapshot each frame.
 
-Starting and stopping a rewind is server-authorative, but the rewind happens on each client for a smooth experience. Unreal's actor replication is temporarily disabled during a rewind, since each client must be in control of its own actors.
+Starting and stopping a rewind is server-authorative, but the rewind happens on each client for a smooth experience. Ideally, Unreal's actor replication should be temporarily disabled during a rewind, since each client must be in control of its own actors, but I didn't manage to do that successfully.
 
 During a rewind a cursor is scrubbed back through the timeline, sampling and restoring snapshots each frame. A snapshot includes, for each actor subject to rewinding:
 

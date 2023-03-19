@@ -19,10 +19,6 @@ void ARewindableCharacter::StartRewind()
 		Movement->StopMovementImmediately();
 		Movement->DisableMovement();
 	}
-
-	if (HasAuthority()) {
-		SetReplicates(false);
-	}
 }
 
 void ARewindableCharacter::StopRewind()
@@ -38,10 +34,6 @@ void ARewindableCharacter::StopRewind()
 		} else {
 			Movement->SetDefaultMovementMode();
 		}
-	}
-
-	if (HasAuthority()) {
-		SetReplicates(true);
 	}
 }
 
