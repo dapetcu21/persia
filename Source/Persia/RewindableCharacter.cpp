@@ -49,9 +49,16 @@ void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snaps
 {
 	Snapshot.Transform = GetActorTransform();
 	Snapshot.TimeOfDeath = TimeOfDeath;
-	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
-		// Crossing fingers I'm allowed to call this on the gameplay thread
-		AnimInstance->SnapshotPose(Snapshot.Pose);
+
+	// Snapshotting dead enemies or players results in yet-undiagnosed crashes.
+	// For players, the pose snapshot was useless anyway and for enemies it
+	// only vaguely matters if a rewind is initiated during the 1s dissolve,
+	// so it's safe to disable.
+	if (!IsDead()) {
+		if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
+			// Crossing fingers I'm allowed to call this on the gameplay thread
+			AnimInstance->SnapshotPose(Snapshot.Pose);
+		}
 	}
 }
 
