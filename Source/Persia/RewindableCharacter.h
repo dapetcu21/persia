@@ -47,7 +47,6 @@ public:
 protected:
 	UFUNCTION()
 	void OnRep_TimeOfDeath();
-	void UpdateTimeOfDeath();
 
 	UFUNCTION(BlueprintNativeEvent)
 	void UpdateDeathState(bool bDied);

@@ -60,7 +60,7 @@ void ARewindableCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapsh
 
 	if (Snapshot.TimeOfDeath != TimeOfDeath) {
 		TimeOfDeath = Snapshot.TimeOfDeath;
-		UpdateTimeOfDeath();
+		OnRep_TimeOfDeath();
 	}
 
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
@@ -96,18 +96,11 @@ void ARewindableCharacter::Die()
 		TimeOfDeath = 1.0;
 	}
 
-	UpdateTimeOfDeath();
+	OnRep_TimeOfDeath();
 }
 
 void ARewindableCharacter::OnRep_TimeOfDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("RepNotify time of death %s: %lf"), *GetFName().ToString(), TimeOfDeath);
-	UpdateTimeOfDeath();
-}
-
-void ARewindableCharacter::UpdateTimeOfDeath()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Time of death of %s: %lf"), *GetFName().ToString(), TimeOfDeath);
 	double OldTimeOfDeath = LastTimeOfDeath;
 	LastTimeOfDeath = TimeOfDeath;
 	bool bDied = IsDead();
