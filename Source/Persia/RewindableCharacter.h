@@ -16,12 +16,29 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bRewinding = false;
 
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_TimeOfDeath)
+	double TimeOfDeath = -1.0;
+
 public:
 	void BeginPlay() override;
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void virtual StartRewind();
-	void virtual StopRewind();
-	void virtual SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot);
-	void virtual RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot);
+	virtual void StartRewind();
+	virtual void StopRewind();
+	virtual void SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot);
+	virtual void RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot);
+
+	UFUNCTION(BlueprintPure)
+	inline bool IsDead() { return TimeOfDeath >= 0; }
+
+	UFUNCTION(BlueprintCallable)
+	void Die();
+
+protected:
+	UFUNCTION()
+	void OnRep_TimeOfDeath();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void UpdateTimeOfDeath();
+	virtual void UpdateTimeOfDeath_Implementation();
 };

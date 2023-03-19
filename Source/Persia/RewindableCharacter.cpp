@@ -3,6 +3,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "PersiaGameState.h"
 #include "RewindSnapshot.h"
 #include "RewindableAnimInstance.h"
 
@@ -24,13 +25,18 @@ void ARewindableCharacter::StopRewind()
 	}
 
 	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
-		CharacterMovement->SetDefaultMovementMode();
+		if (IsDead()) {
+			CharacterMovement->DisableMovement();
+		} else {
+			CharacterMovement->SetDefaultMovementMode();
+		}
 	}
 }
 
 void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snapshot)
 {
 	Snapshot.Transform = GetActorTransform();
+	Snapshot.TimeOfDeath = TimeOfDeath;
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->SnapshotPose(Snapshot.Pose);
 	}
@@ -39,6 +45,11 @@ void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snaps
 void ARewindableCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapshot& Snapshot)
 {
 	SetActorTransform(Snapshot.Transform);
+
+	if (Snapshot.TimeOfDeath != TimeOfDeath) {
+		TimeOfDeath = Snapshot.TimeOfDeath;
+		UpdateTimeOfDeath();
+	}
 
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
 		AnimInstance->SetRewoundPose(Snapshot.Pose);
@@ -60,4 +71,35 @@ void ARewindableCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>&
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(ARewindableCharacter, NetId, COND_InitialOnly);
+	DOREPLIFETIME(ARewindableCharacter, TimeOfDeath);
+}
+
+void ARewindableCharacter::Die()
+{
+	if (IsDead() || !HasAuthority()) return;
+
+	if (APersiaGameState* GameState = GetWorld()->GetGameState<APersiaGameState>()) {
+		TimeOfDeath = GameState->GetRewindGameTime();
+	} else {
+		TimeOfDeath = 1.0;
+	}
+
+	UpdateTimeOfDeath();
+}
+
+void ARewindableCharacter::OnRep_TimeOfDeath()
+{
+	if (bRewinding) return;
+	UpdateTimeOfDeath();
+}
+
+void ARewindableCharacter::UpdateTimeOfDeath_Implementation()
+{
+	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+		if (IsDead()) {
+			CharacterMovement->DisableMovement();
+		} else {
+			CharacterMovement->SetDefaultMovementMode();
+		}
+	}
 }

@@ -24,6 +24,9 @@ struct FRewindActorSnapshot
 
 	UPROPERTY()
 	FPoseSnapshot Pose;
+
+	UPROPERTY()
+	double TimeOfDeath = -1.0;
 };
 
 USTRUCT()

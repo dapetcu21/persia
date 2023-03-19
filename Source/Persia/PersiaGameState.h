@@ -44,5 +44,6 @@ public:
 	void StopRewind(const struct FRewindSnapshot& Snapshot);
 	void StopRewind_Implementation(const struct FRewindSnapshot& Snapshot);
 
-protected:
+	UFUNCTION(BlueprintPure)
+	double GetRewindGameTime();
 };

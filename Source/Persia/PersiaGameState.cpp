@@ -59,3 +59,8 @@ void APersiaGameState::StopRewind_Implementation(const struct FRewindSnapshot& S
 	RewindingPlayer = nullptr;
 	OnRewindingPlayerChange.Broadcast(RewindingPlayer);
 }
+
+double APersiaGameState::GetRewindGameTime()
+{
+	return RewindManager->GetGameTime();
+}
