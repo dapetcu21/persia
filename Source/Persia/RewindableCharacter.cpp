@@ -15,9 +15,9 @@ void ARewindableCharacter::StartRewind()
 {
 	bRewinding = true;
 
-	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
-		CharacterMovement->StopMovementImmediately();
-		CharacterMovement->DisableMovement();
+	if (UCharacterMovementComponent* Movement = GetCharacterMovement()) {
+		Movement->StopMovementImmediately();
+		Movement->DisableMovement();
 	}
 
 	if (HasAuthority()) {
@@ -32,11 +32,11 @@ void ARewindableCharacter::StopRewind()
 		AnimInstance->ClearRewoundPose();
 	}
 
-	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+	if (UCharacterMovementComponent* Movement = GetCharacterMovement()) {
 		if (IsDead()) {
-			CharacterMovement->DisableMovement();
+			Movement->DisableMovement();
 		} else {
-			CharacterMovement->SetDefaultMovementMode();
+			Movement->SetDefaultMovementMode();
 		}
 	}
 
@@ -113,12 +113,12 @@ void ARewindableCharacter::OnRep_TimeOfDeath()
 
 void ARewindableCharacter::UpdateDeathState_Implementation(bool bDied)
 {
-	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
+	if (UCharacterMovementComponent* Movement = GetCharacterMovement()) {
 		if (bDied) {
-			CharacterMovement->StopMovementImmediately();
-			CharacterMovement->DisableMovement();
+			Movement->StopMovementImmediately();
+			Movement->DisableMovement();
 		} else {
-			CharacterMovement->SetDefaultMovementMode();
+			Movement->SetDefaultMovementMode();
 		}
 	}
 }

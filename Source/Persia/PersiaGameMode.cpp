@@ -28,18 +28,18 @@ APersiaGameMode::APersiaGameMode()
 void APersiaGameMode::PostLogin(APlayerController* PlayerController)
 {
 	Super::PostLogin(PlayerController);
-	if (APersiaGameState* GameState = GetGameState<APersiaGameState>()) {
-		GameState->ReInitRewindManager();
+	if (APersiaGameState* PersiaGameState = GetGameState<APersiaGameState>()) {
+		PersiaGameState->ReInitRewindManager();
 	}
 }
 
 void APersiaGameMode::CheckGameOver()
 {
-	APersiaGameState* GameState = GetGameState<APersiaGameState>();
-	if (GameState == nullptr) return;
+	APersiaGameState* PersiaGameState = GetGameState<APersiaGameState>();
+	if (PersiaGameState == nullptr) return;
 
-	if (GameState->Phase == EPersiaGamePhase::Running && !GameState->IsRewinding()) {
-		double RewindTime = GameState->GetRewindGameTime();
+	if (PersiaGameState->Phase == EPersiaGamePhase::Running && !PersiaGameState->IsRewinding()) {
+		double RewindTime = PersiaGameState->GetRewindGameTime();
 
 		bool bEveryoneDead = true;
 		bool bEnemiesDead = true;
@@ -60,9 +60,9 @@ void APersiaGameMode::CheckGameOver()
 
 		if (bAnyoneLoggedIn) {
 			if (bEveryoneDead) {
-				GameState->SetPhase(EPersiaGamePhase::Lost);
+				PersiaGameState->SetPhase(EPersiaGamePhase::Lost);
 			} else if (bEnemiesDead) {
-				GameState->SetPhase(EPersiaGamePhase::Won);
+				PersiaGameState->SetPhase(EPersiaGamePhase::Won);
 			}
 		}
 	}
