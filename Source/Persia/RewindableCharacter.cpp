@@ -50,6 +50,7 @@ void ARewindableCharacter::SaveRewindSnapshot(struct FRewindActorSnapshot& Snaps
 	Snapshot.Transform = GetActorTransform();
 	Snapshot.TimeOfDeath = TimeOfDeath;
 	if (URewindableAnimInstance* AnimInstance = Cast<URewindableAnimInstance>(GetMesh()->GetAnimInstance())) {
+		// Crossing fingers I'm allowed to call this on the gameplay thread
 		AnimInstance->SnapshotPose(Snapshot.Pose);
 	}
 }
