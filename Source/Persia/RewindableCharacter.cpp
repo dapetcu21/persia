@@ -114,6 +114,7 @@ void ARewindableCharacter::UpdateDeathState_Implementation(bool bDied)
 {
 	if (UCharacterMovementComponent* CharacterMovement = GetCharacterMovement()) {
 		if (bDied) {
+			CharacterMovement->StopMovementImmediately();
 			CharacterMovement->DisableMovement();
 		} else {
 			CharacterMovement->SetDefaultMovementMode();
