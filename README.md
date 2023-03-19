@@ -30,13 +30,15 @@ Similarily, the enemy AI's behavior tree must fulfill the same stateless-ness re
 
 * RewindManager.cpp: Client-side rewind and timeline logic (instantiated in PersiaGameState)
 * PersiaGameState.cpp: Handles rewind starting and stopping, game pausing
+* PersiaGameMode.cpp: Game over conditions
 * RewindableCharacter.cpp: Snapshotting logic, character death
 * RewindableAnimInstance.cpp / ABP_Manny: Animation snapshotting
 * PersiaPlayerCharacter.cpp: Input, camera snapshotting
+* BP_PersiaPlayerCharacter: Ragdoll
 * PersiaEnemyCharacter.cpp: AI state snapshotting
-* BT_EnemyPatrol: Enemy AI behavior tree
-* PersiaGameMode.cpp: Game over conditions
+* BP_PersiaEnemyCharacter: Dissolve shader control
 * M_Mannequin: Dissolve shader
+* BT_EnemyPatrol: Enemy AI behavior tree
 
 
 ## Misc other behaviors:
