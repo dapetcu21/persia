@@ -9,5 +9,10 @@ UCLASS(Blueprintable, BlueprintType)
 class APersiaPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void RestartGame();
+	void RestartGame_Implementation();
 };
 
