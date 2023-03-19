@@ -23,10 +23,11 @@ struct FRewindActorSnapshot
 	FVector PatrolDirection;
 
 	UPROPERTY()
-	FPoseSnapshot Pose;
-
-	UPROPERTY()
 	double TimeOfDeath = -1.0;
+
+	// Too big to send over the network
+	UPROPERTY(NotReplicated)
+	FPoseSnapshot Pose;
 };
 
 USTRUCT()
