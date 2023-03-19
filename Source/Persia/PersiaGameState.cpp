@@ -1,5 +1,7 @@
 #include "PersiaGameState.h"
 
+#include "Engine/World.h"
+#include "PersiaGameMode.h"
 #include "RewindManager.h"
 
 APersiaGameState::APersiaGameState()
@@ -28,7 +30,9 @@ void APersiaGameState::ReInitRewindManager_Implementation()
 
 void APersiaGameState::Tick(float DeltaSeconds)
 {
-	RewindManager->Tick(DeltaSeconds);
+	if (Phase == EPersiaGamePhase::Running) {
+		RewindManager->Tick(DeltaSeconds);
+	}
 }
 
 void APersiaGameState::RequestStartRewind(class APersiaPlayerCharacter* Sender)
@@ -46,6 +50,10 @@ void APersiaGameState::RequestStopRewind(class APersiaPlayerCharacter* Sender)
 
 void APersiaGameState::StartRewind_Implementation(class APersiaPlayerCharacter* Sender)
 {
+	if (Phase == EPersiaGamePhase::Lost && HasAuthority()) {
+		SetPhase(EPersiaGamePhase::Running);
+	}
+
 	RewindingPlayer = Sender;
 	RewindManager->StartRewind();
 	OnRewindingPlayerChange.Broadcast(RewindingPlayer);
@@ -62,5 +70,29 @@ void APersiaGameState::StopRewind_Implementation(const struct FRewindSnapshot& S
 
 double APersiaGameState::GetRewindGameTime()
 {
-	return RewindManager->GetGameTime();
+	return RewindManager == nullptr ? 0.0 : RewindManager->GetGameTime();
+}
+
+bool APersiaGameState::IsRewinding()
+{
+	return RewindManager != nullptr && RewindManager->bRewinding;
+}
+
+void APersiaGameState::SetPhase_Implementation(EPersiaGamePhase InPhase)
+{
+	if (InPhase == Phase) return;
+	Phase = InPhase;
+
+	if (APersiaGameMode* GameMode = Cast<APersiaGameMode>(GetWorld()->GetAuthGameMode())) {
+		bool bShouldBePaused = Phase != EPersiaGamePhase::Running;
+		if (GameMode->IsPaused() != bShouldBePaused) {
+			if (bShouldBePaused) {
+				GameMode->SetPause(GetWorld()->GetFirstPlayerController());
+			} else {
+				GameMode->ClearPause();
+			}
+		}
+	}
+
+	OnPhaseChange.Broadcast(Phase);
 }

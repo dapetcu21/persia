@@ -16,6 +16,15 @@ public:
 	APersiaGameMode();
 
 protected:
+	UPROPERTY(EditDefaultsOnly)
+	double PlayerDelayAfterDeath = 5.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	double EnemyDelayAfterDeath = 2.0f;
+
+protected:
 	void PostLogin(APlayerController* PlayerController) override;
+	void Tick(float DeltaSeconds) override;
+	void CheckGameOver();
 };
 
