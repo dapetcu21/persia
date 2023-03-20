@@ -20,6 +20,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bRewinding = false;
 
+	// We could have used a bDead bool, but this way 
+	// we can rewind the post-death UI as well
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_TimeOfDeath)
 	double TimeOfDeath = -1.0;
 
