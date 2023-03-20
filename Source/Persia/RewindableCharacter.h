@@ -30,7 +30,7 @@ public:
 	FDeathStateDelegate OnDeathStateChange;
 
 public:
-	void BeginPlay() override;
+	void PostInitializeComponents() override;
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void StartRewind();

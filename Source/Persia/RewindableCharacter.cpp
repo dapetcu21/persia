@@ -68,9 +68,9 @@ void ARewindableCharacter::RestoreRewindSnapshot(const struct FRewindActorSnapsh
 	}
 }
 
-void ARewindableCharacter::BeginPlay()
+void ARewindableCharacter::PostInitializeComponents()
 {
-	Super::BeginPlay();
+	Super::PostInitializeComponents();
 	if (HasAuthority()) {
 		static int32 NetIdCounter = 1;
 		NetId = NetIdCounter;
