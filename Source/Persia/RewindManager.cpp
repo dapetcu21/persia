@@ -10,10 +10,9 @@ void URewindManager::Setup()
 	TrackedActors.Empty();
 	Snapshots.Empty();
 
-	for (FActorIterator It(GameState->GetWorld()); It; ++It) {
-		if (ARewindableCharacter* Actor = Cast<ARewindableCharacter>(*It)) {
-			TrackedActors.Add(Actor->NetId, Actor);
-		}
+	for (TActorIterator<ARewindableCharacter> It = TActorIterator<ARewindableCharacter>(GameState->GetWorld(), ARewindableCharacter::StaticClass()); It; ++It) {
+		ARewindableCharacter* Actor = *It;
+		TrackedActors.Add((*It)->NetId, Actor);
 	}
 
 	TimestampOffset = -GameState->GetServerWorldTimeSeconds();
