@@ -28,3 +28,5 @@ thumbs.db
 *.code-workspace
 /Build
 /Packaged
+!/Executables/**
+/Executables/**/Logs
